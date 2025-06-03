@@ -11,7 +11,7 @@ public record DatosSerie(
         */
         @JsonAlias("Title") String Titulo,
         @JsonAlias("totalSeasons") int totalDeTemporada,
-        @JsonAlias("imdbRating") int evaluacion
+        @JsonAlias("imdbRating") double evaluacion
 
 ) {
 }
