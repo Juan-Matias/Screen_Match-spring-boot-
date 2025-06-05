@@ -4,6 +4,7 @@ import com.aluracursos.model.DatosEpisodio;
 import com.aluracursos.model.DatosSerie;
 import com.aluracursos.model.DatosSerie;
 import com.aluracursos.model.DatosTemporadas;
+import com.aluracursos.principal.EjemplosStreams;
 import com.aluracursos.principal.Principal;
 import com.aluracursos.service.ConsumoAPI;
 import com.aluracursos.service.ConvierteDatos;
@@ -25,6 +26,7 @@ public class ScreetmatchApplication implements CommandLineRunner  {
 	public void run(String... args) throws Exception {
 		Principal principal = new Principal();
 		principal.muestraElMenu();
-
+		//EjemplosStreams ejemplosStreams = new EjemplosStreams();
+		//ejemplosStreams.muestraEjemplo();
 	}
 }
