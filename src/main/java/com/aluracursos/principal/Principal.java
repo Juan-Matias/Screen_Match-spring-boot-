@@ -3,6 +3,7 @@ package com.aluracursos.principal;
 import com.aluracursos.model.DatosEpisodio;
 import com.aluracursos.model.DatosSerie;
 import com.aluracursos.model.DatosTemporadas;
+import com.aluracursos.model.Episodio;
 import com.aluracursos.service.ConsumoAPI;
 import com.aluracursos.service.ConvierteDatos;
 
@@ -18,70 +19,46 @@ public class Principal {
     private final String API_KEY = "&apikey=fe9a08ca";
     private ConvierteDatos conversor = new ConvierteDatos();
 
-    public void muestraElMenu(){
+    public void muestraElMenu() {
+        System.out.println("Por favor escribe el nombre de la serie que deseas buscar:");
 
-        System.out.println("Por favor escribe el nombre de la seria que deaseas Buscar");
-
-        //Busca los datos generales de la seria:
         var nombreSeria = teclado.nextLine();
-        var json = consumoAPI.obtenerDatos(	URL_BASE+nombreSeria.replace(" ","+")+API_KEY);
+        var json = consumoAPI.obtenerDatos(URL_BASE + nombreSeria.replace(" ", "+") + API_KEY);
         var datos = conversor.obtenerDatos(json, DatosSerie.class);
         System.out.println(datos);
 
-        //Busca los datos de todas las temporadas
+        // Lista para guardar temporadas
         List<DatosTemporadas> temporadas = new ArrayList<>();
 
-        /*
+        // Obtener datos de todas las temporadas
         for (int i = 1; i <= datos.totalDeTemporada(); i++) {
             json = consumoAPI.obtenerDatos(URL_BASE + nombreSeria.replace(" ", "+") + "&Season=" + i + API_KEY);
             var datosTemporadas = conversor.obtenerDatos(json, DatosTemporadas.class);
             temporadas.add(datosTemporadas);
         }
-        temporadas.forEach(System.out::println);
-        */
 
-
-        //Funciones lambda
-        /*temporadas.forEach(
-                t -> t.episodios()
-                        .forEach(e -> System.out.println(e.titulo())));
-*/
-        //Convertir todas las informacion a una lista del tipo DatosEpisodio
+        // Convertir toda la información a una lista de DatosEpisodio
         List<DatosEpisodio> datosEpisodios = temporadas.stream()
                 .flatMap(t -> t.episodios().stream())
-                        .toList();
+                .toList();
 
-        //Top 5 episodios
-        System.out.println("Top 5 mejores Episodios");
+        // Mostrar top 5 mejores episodios por evaluación numérica
+        System.out.println("Top 5 mejores episodios:");
         datosEpisodios.stream()
                 .filter(e -> !e.evaluacion().equals("N/A"))
-                .sorted(Comparator.comparing(DatosEpisodio::evaluacion).reversed())
+                .sorted(Comparator.comparing(
+                        e -> Double.parseDouble(e.evaluacion()), Comparator.reverseOrder()))
                 .limit(5)
-                        .forEach(System.out::println);
+                .forEach(System.out::println);
 
-        /*
-        // Mostrar solo el titulo de los episodios para las temporadas
+        //Conviertiendo los dato a una lista del tipo Episodios
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(d -> new Episodio(t.numero(),d)))
+                .toList();
 
-        System.out.printf("%-10s | %-8s | %s%n", "Temporada", "Episodio", "Título");
-        System.out.println("-----------------------------------------------");
+        episodios.forEach(System.out::println);
+    }
 
-        temporadas.forEach(t -> {
-            String temporada = String.valueOf(t.numero());
-            t.episodios().forEach(e -> {
-                String episodio = e.evaluacion();
-                System.out.printf("%-10s | %-8s | %s%n", temporada, episodio, e.titulo());
-            });
-        });
-
-
-        for (int i = 0; i < datos.totalDeTemporada(); i++) {
-             List<DatosEpisodio> episodiosTemporadas = temporadas.get(i).episodios();
-
-            for (int j = 0; j < episodiosTemporadas.size(); j++) {
-                System.out.println(episodiosTemporadas.get(j).titulo());
-            }
-        }*/
-
-        }
 
 }

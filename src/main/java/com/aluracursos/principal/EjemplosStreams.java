@@ -17,19 +17,14 @@ public class EjemplosStreams {
 
         // Iniciamos una operación con Streams sobre la lista de nombres
         nombres.stream()
-
                 // Limita el stream a solo los primeros 2 elementos
                 .limit(2)
-
                 // Filtra los elementos cuyo nombre comienza con "M"
                 .filter(n -> n.startsWith("M"))
-
                 // Convierte los nombres a mayúsculas
                 .map(n -> n.toUpperCase())
-
                 // Ordena alfabéticamente los nombres (ya en mayúsculas)
                 .sorted()
-
                 // Imprime cada elemento resultante del stream en la consola
                 .forEach(System.out::println);
     }
