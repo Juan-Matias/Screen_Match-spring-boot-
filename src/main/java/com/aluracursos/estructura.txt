@@ -1,0 +1,26 @@
+Listado de rutas de carpetas para el volumen DISK
+El n£mero de serie del volumen es 3C81-E8C9
+D:.
+|   estructura.txt
+|   
++---model
+|       Categoria.java
+|       DatosEpisodio.java
+|       DatosSerie.java
+|       DatosTemporadas.java
+|       Episodio.java
+|       Serie.java
+|       
++---principal
+|       EjemplosStreams.java
+|       Principal.java
+|       
++---screetmatch
+|       ScreetmatchApplication.java
+|       
+\---service
+        ConsultaChatGPT.java
+        ConsumoAPI.java
+        ConvierteDatos.java
+        IConvierteDatos.java
+        

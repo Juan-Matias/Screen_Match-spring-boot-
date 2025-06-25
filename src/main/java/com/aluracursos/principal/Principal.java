@@ -1,9 +1,6 @@
 package com.aluracursos.principal;
 
-import com.aluracursos.model.DatosEpisodio;
-import com.aluracursos.model.DatosSerie;
-import com.aluracursos.model.DatosTemporadas;
-import com.aluracursos.model.Episodio;
+import com.aluracursos.model.*;
 import com.aluracursos.service.ConsumoAPI;
 import com.aluracursos.service.ConvierteDatos;
 
@@ -85,7 +82,13 @@ public class Principal {
 
 
     private void mostrarSeriesBuscadas() {
-        datosSeries.forEach(System.out::println);
+        List<Serie> series = new ArrayList<>();
+        series =datosSeries.stream()
+                .map(d -> new Serie(d))
+                .toList();
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 
 
