@@ -1,6 +1,7 @@
 package com.aluracursos.model;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
@@ -22,6 +23,11 @@ public class Serie {
     private String actores;
     private String sinopsis;
 
+    @Transient
+    private List<Episodio> episodios;
+
+    //Constructor predeterminado
+    public Serie(){}
 
     public Serie(DatosSerie datosSerie){
         this.Titulo = datosSerie.Titulo();
