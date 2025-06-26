@@ -22,8 +22,7 @@ public class Serie {
 
     private String actores;
     private String sinopsis;
-
-    @Transient
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios;
 
     //Constructor predeterminado
@@ -53,6 +52,16 @@ public class Serie {
     }
 
     // Constructors :
+
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
+    }
+
     public Long getId() {
         return Id;
     }

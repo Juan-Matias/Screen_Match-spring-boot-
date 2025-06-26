@@ -5,6 +5,7 @@ import com.aluracursos.repository.ISerieRepository;
 import com.aluracursos.service.ConsumoAPI;
 import com.aluracursos.service.ConvierteDatos;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner teclado = new Scanner(System.in);
@@ -16,6 +17,7 @@ public class Principal {
     private ConvierteDatos conversor = new ConvierteDatos();
     private List<DatosSerie> datosSeries = new ArrayList<>();
     private ISerieRepository repositorio;
+    private  List<Serie> series;
 
     public Principal(ISerieRepository repository) {
     this.repositorio = repository;
@@ -29,33 +31,29 @@ public class Principal {
         //Creacion del Menu
         while (opcion != 0) {
             var menu = """
+                    \n📺 MENÚ PRINCIPAL
                     1 - Buscar series 
                     2 - Buscar episodios
                     3 - Mostrar series buscadas
-                                  
                     0 - Salir
                     """;
             System.out.println(menu);
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            try {
+                opcion = Integer.parseInt(teclado.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Debes ingresar un número válido.");
+                continue;
+            }
 
             switch (opcion) {
-                case 1:
-                    buscarSerieWeb();
-                    break;
-                case 2:
-                    buscarEpisodioPorSerie();
-                    break;
-                case 3:
-                    mostrarSeriesBuscadas();
-                    break;
-
-                case 0:
-                    System.out.println("Cerrando la aplicación...");
-                    break;
-                default:
-                    System.out.println("Opción inválida");
+                case 1 -> buscarSerieWeb();
+                case 2 -> buscarEpisodioPorSerie();
+                case 3 -> mostrarSeriesBuscadas();
+                case 0 -> System.out.println("👋 Cerrando la aplicación...");
+                default -> System.out.println("❌ Opción inválida");
             }
+
+
         }
 
     }
@@ -70,15 +68,29 @@ public class Principal {
     }
 
     private void buscarEpisodioPorSerie() {
-        DatosSerie datosSerie = getDatosSerie();
-        List<DatosTemporadas> temporadas = new ArrayList<>();
+        mostrarSeriesBuscadas();
+        System.out.printf("Escribe el nombre de la serias de la cual quieras ver los episodios");
+        var nombreSerie = teclado.nextLine();
+        Optional<Serie> serie = series.stream()
+                .filter(s -> s.getTitulo().toLowerCase().contains(nombreSerie.toLowerCase()))
+                .findFirst();
+        if (serie.isPresent()) {
+            var seriesEncontrada = serie.get();
+            List<DatosTemporadas> temporadas = new ArrayList<>();
 
-        for (int i = 1; i <= datosSerie.totalTemporadas(); i++) {
-            var json = consumoAPI.obtenerDatos(URL_BASE + datosSerie.Titulo().replace(" ", "+") + "&season=" + i + API_KEY);
-            DatosTemporadas datosTemporada = conversor.obtenerDatos(json, DatosTemporadas.class);
-            temporadas.add(datosTemporada);
+            for (int i = 1; i <= seriesEncontrada.getTotalDeTemporada(); i++) {
+                var json = consumoAPI.obtenerDatos(URL_BASE + seriesEncontrada.getTitulo().replace(" ", "+") + "&season=" + i + API_KEY);
+                DatosTemporadas datosTemporada = conversor.obtenerDatos(json, DatosTemporadas.class);
+                temporadas.add(datosTemporada);
+            }
+            temporadas.forEach(System.out::println);
+            List<Episodio> episodios = temporadas.stream()
+                    .flatMap(d -> d.episodios().stream()
+                            .map(e -> new Episodio(d.numero(), e)))
+                    .toList();
+            seriesEncontrada.setEpisodios(episodios);
+            repositorio.save(seriesEncontrada);
         }
-        temporadas.forEach(System.out::println);
     }
 
     private void buscarSerieWeb() {
@@ -91,7 +103,7 @@ public class Principal {
 
 
     private void mostrarSeriesBuscadas() {
-        List<Serie> series = repositorio.findAll();
+       series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
