@@ -22,7 +22,8 @@ public class Serie {
 
     private String actores;
     private String sinopsis;
-    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
     private List<Episodio> episodios;
 
     //Constructor predeterminado
@@ -38,19 +39,6 @@ public class Serie {
         this.sinopsis=datosSerie.sinopsis();
     }
 
-
-    @Override
-    public String toString() {
-        return
-                ", genero=" + genero +
-                " Titulo='" + Titulo + '\'' +
-                ", totalDeTemporada=" + totalDeTemporada +
-                ", evaluacion=" + evaluacion +
-                ", poster='" + poster + '\'' +
-                ", actores='" + actores + '\'' +
-                ", sinopsis='" + sinopsis + '\'';
-    }
-
     // Constructors :
 
 
@@ -59,6 +47,7 @@ public class Serie {
     }
 
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
         this.episodios = episodios;
     }
 
@@ -125,4 +114,20 @@ public class Serie {
     public void setSinopsis(String sinopsis) {
         this.sinopsis = sinopsis;
     }
+
+    // Zona de Mensaje
+    @Override
+    public String toString() {
+        return
+                ", genero=" + genero +
+                        " Titulo='" + Titulo + '\'' +
+                        ", totalDeTemporada=" + totalDeTemporada +
+                        ", evaluacion=" + evaluacion +
+                        ", poster='" + poster + '\'' +
+                        ", actores='" + actores + '\'' +
+                        ", sinopsis='" + sinopsis + '\''+
+                        ", Episodios='" + episodios + '\'';
+
+    }
+
 }
