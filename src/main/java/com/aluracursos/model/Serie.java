@@ -12,7 +12,7 @@ public class Serie {
     private Long Id;
 
     @Column(unique = true)
-    private String Titulo;
+    private String titulo;
     private int totalDeTemporada;
     private double evaluacion;
     private String poster;
@@ -30,7 +30,7 @@ public class Serie {
     public Serie(){}
 
     public Serie(DatosSerie datosSerie){
-        this.Titulo = datosSerie.Titulo();
+        this.titulo = datosSerie.Titulo();
         this.totalDeTemporada = datosSerie.totalDeTemporada();
         this.evaluacion = OptionalDouble.of(Double.valueOf(datosSerie.evaluacion())).orElse(0);
         this.poster = datosSerie.sinopsis();
@@ -60,11 +60,11 @@ public class Serie {
     }
 
     public String getTitulo() {
-        return Titulo;
+        return titulo;
     }
 
     public void setTitulo(String titulo) {
-        Titulo = titulo;
+        this.titulo = titulo;
     }
 
     public int getTotalDeTemporada() {
@@ -120,7 +120,7 @@ public class Serie {
     public String toString() {
         return
                 ", genero=" + genero +
-                        " Titulo='" + Titulo + '\'' +
+                        " Titulo='" + titulo + '\'' +
                         ", totalDeTemporada=" + totalDeTemporada +
                         ", evaluacion=" + evaluacion +
                         ", poster='" + poster + '\'' +

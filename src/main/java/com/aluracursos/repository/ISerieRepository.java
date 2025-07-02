@@ -1,8 +1,15 @@
 package com.aluracursos.repository;
 
+import com.aluracursos.model.Categoria;
 import com.aluracursos.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ISerieRepository extends JpaRepository<Serie,Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface ISerieRepository extends JpaRepository<Serie,Long> {
+    Optional<Serie>findByTituloContainsIgnoreCase(String nombreSerie);
+    List<Serie> findTop5ByOrderByEvaluacionDesc();
+
+    List<Serie> findByGenero(Categoria categoria);
 }

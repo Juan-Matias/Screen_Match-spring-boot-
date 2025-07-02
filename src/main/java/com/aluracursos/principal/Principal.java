@@ -35,6 +35,9 @@ public class Principal {
                     1 - Buscar series 
                     2 - Buscar episodios
                     3 - Mostrar series buscadas
+                    4 - Buscar serie por titulo
+                    5 - Top 5 Mejores Series
+                    6 - Buscar Serie por Categoria
                     0 - Salir
                     """;
             System.out.println(menu);
@@ -49,6 +52,9 @@ public class Principal {
                 case 1 -> buscarSerieWeb();
                 case 2 -> buscarEpisodioPorSerie();
                 case 3 -> mostrarSeriesBuscadas();
+                case 4 -> buscarSerieTitulo();
+                case 5 -> buscarTop5Series();
+                case 6 -> buscarCategoria();
                 case 0 -> System.out.println("👋 Cerrando la aplicación...");
                 default -> System.out.println("❌ Opción inválida");
             }
@@ -109,5 +115,35 @@ public class Principal {
                 .forEach(System.out::println);
     }
 
+
+    private void buscarSerieTitulo() {
+        System.out.printf("Escribe el nombre de la serie que deseas buscar :3");
+        var nombreSerie = teclado.nextLine();
+        Optional<Serie> serieBuscada = repositorio.findByTituloContainsIgnoreCase(nombreSerie);
+
+        if (serieBuscada.isPresent()) {
+            System.out.println("La serie buscada es: " + serieBuscada.get());
+
+        }else {
+            System.out.println("Serie no encontrada ❌");
+        }
+    }
+
+    private void buscarTop5Series(){
+        List<Serie> topSeries = repositorio.findTop5ByOrderByEvaluacionDesc();
+        topSeries.forEach(s ->
+                        System.out.printf("Serie: " + s.getTitulo() + "Evaluacion" + s.getEvaluacion())
+                );
+
+    }
+
+    private void buscarCategoria(){
+        System.out.printf("Escribe el genero/categoria que desea buscar");
+        var genero = teclado.nextLine();
+        var categoria = Categoria.fromEspanol(genero);
+        List<Serie> seriesPorCategoria = repositorio.findByGenero(categoria);
+        System.out.println("Las series de las categoria"+ genero );
+        seriesPorCategoria.forEach(System.out::println);
+    }
 
 }
