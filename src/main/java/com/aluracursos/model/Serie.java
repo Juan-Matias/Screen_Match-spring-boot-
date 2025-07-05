@@ -31,14 +31,19 @@ public class Serie {
 
     public Serie(DatosSerie datosSerie){
         this.titulo = datosSerie.Titulo();
-        this.totalDeTemporada = datosSerie.totalDeTemporada();
+
+        try {
+            this.totalDeTemporada = Integer.parseInt(datosSerie.totalDeTemporada());
+        } catch (NumberFormatException e) {
+            this.totalDeTemporada = 0; // valor por defecto si no se puede convertir
+        }
+
         this.evaluacion = OptionalDouble.of(Double.valueOf(datosSerie.evaluacion())).orElse(0);
-        this.poster = datosSerie.sinopsis();
+        this.poster = datosSerie.poster(); // ojo: aquí pusiste `sinopsis()` por error
         this.genero = Categoria.fromString(datosSerie.genero().split(",")[0].trim());
         this.actores = datosSerie.actores();
-        this.sinopsis=datosSerie.sinopsis();
+        this.sinopsis = datosSerie.sinopsis();
     }
-
     // Constructors :
 
 
