@@ -26,8 +26,37 @@ Screetmatch es una aplicación Java desarrollada en el contexto de los cursos de
 
 ## 📁 Estructura del proyecto
 
-## 👨‍🔧 Diagrama de clases
 
+
+```
++---model
+|       Categoria.java
+|       DatosEpisodio.java
+|       DatosSerie.java
+|       DatosTemporadas.java
+|       Episodio.java
+|       Serie.java
+|       
++---principal
+|       EjemplosStreams.java
+|       Principal.java
+|       
++---repository
+|       ISerieRepository.java
+|       
++---screetmatch
+|       ScreetmatchApplication.java
+|       
+\---service
+        ConsultaChatGPT.java
+        ConsumoAPI.java
+        ConvierteDatos.java
+        IConvierteDatos.java
+```
+
+---
+
+## 👨‍🔧 Diagrama de clases
 ```mermaid
 classDiagram
     class Principal {
