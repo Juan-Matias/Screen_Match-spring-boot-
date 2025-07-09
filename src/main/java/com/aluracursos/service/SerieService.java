@@ -1,23 +1,20 @@
-package com.aluracursos.controller;
+package com.aluracursos.service;
+
+
 import com.aluracursos.dto.SerieDTO;
 import com.aluracursos.repository.ISerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-// modelo Rest: Leer la documentación
-@RestController
-
-public class serieController  {
-    //Atributos
+//Anotacion para nuestro servicio Web
+@Service
+public class SerieService {
     @Autowired
     private ISerieRepository repository;
 
-    // Mapeo de la pagina
-    @GetMapping("/series")
     public List<SerieDTO> obtenerTodasLasSeries(){
         return repository.findAll().stream()
                 .map(s -> new SerieDTO(
