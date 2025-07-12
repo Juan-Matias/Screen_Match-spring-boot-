@@ -29,4 +29,7 @@ public interface ISerieRepository extends JpaRepository<Serie,Long> {
     @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.evaluacion DESC")
     List<Episodio> top5Episodios(Serie serie, org.springframework.data.domain.Pageable pageable);
 
+    //JPQL
+    @Query("SELECT s FROM Serie s JOIN s.episodios e GROUP BY s ORDER BY MAX(e.fechaDeLanzamiento) DESC")
+    List<Serie> lanzamientosMasRecientes();
 }

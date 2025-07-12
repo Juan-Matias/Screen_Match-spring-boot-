@@ -3,7 +3,8 @@ package com.aluracursos.dto;
 import com.aluracursos.model.Categoria;
 
 public record SerieDTO(
-          String titulo,
+        Long id,
+        String titulo,
           int totalDeTemporada,
           double evaluacion,
           String poster,
