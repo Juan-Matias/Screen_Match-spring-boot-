@@ -1,10 +1,12 @@
 package com.aluracursos.repository;
 
+import com.aluracursos.dto.EpisodioDTO;
 import com.aluracursos.model.Categoria;
 import com.aluracursos.model.Episodio;
 import com.aluracursos.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,4 +34,9 @@ public interface ISerieRepository extends JpaRepository<Serie,Long> {
     //JPQL
     @Query("SELECT s FROM Serie s JOIN s.episodios e GROUP BY s ORDER BY MAX(e.fechaDeLanzamiento) DESC")
     List<Serie> lanzamientosMasRecientes();
+
+    //JPQL
+    // Observacion usamos la anotacion @Param para ser mas seguro la relacion de parametros
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s.id = :id AND e.temporada = :numeroTemporada")
+    List<Episodio> obtenerTemporadasPorNumero(@Param("id") Long id, @Param("numeroTemporada") Long numeroTemporada);
 }
